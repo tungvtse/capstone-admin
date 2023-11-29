@@ -56,8 +56,7 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<Frame navs={currentRole === 'admin' ? adminNavs : staffNavs} />}>
-            <Route index element={<DashboardPage />} />
-            <Route path="dashboard" element={<DashboardPage />} />
+            <Route index element={<MembersPage />} />
             <Route path="transactions" element={<MembersPage />} />
             <Route path="table-virtualized" element={<VirtualizedTablePage />} />
             <Route path="sign-in" element={<SignInPage />} />

@@ -79,7 +79,7 @@ const LoginPage = (props: Props) => {
                         console.log(error);
 
                     }
-                    navigate("/dashboard")
+                    navigate("/")
                 }
                 setIsLoading(false)
 
