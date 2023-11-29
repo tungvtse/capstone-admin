@@ -13,7 +13,6 @@ import Error503Page from './pages/authentication/503';
 
 import SignInPage from './pages/authentication/sign-in';
 import MembersPage from './pages/tables/members';
-import VirtualizedTablePage from './pages/tables/virtualized';
 import FormBasicPage from './pages/forms/basic';
 import FormWizardPage from './pages/forms/wizard';
 import { adminNavs, staffNavs } from './config';
@@ -58,7 +57,6 @@ const App = () => {
           <Route path="/" element={<Frame navs={currentRole === 'admin' ? adminNavs : staffNavs} />}>
             <Route index element={<MembersPage />} />
             <Route path="transactions" element={<MembersPage />} />
-            <Route path="table-virtualized" element={<VirtualizedTablePage />} />
             <Route path="sign-in" element={<SignInPage />} />
             {currentRole === 'admin' ? (<><Route path="create-partner-account" element={<PartnerAccount />} />
               <Route path="create-staff-account" element={<StaffAccount />} /></>) : (<></>)}

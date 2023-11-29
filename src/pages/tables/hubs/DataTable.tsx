@@ -13,7 +13,6 @@ import {
 import SearchIcon from '@rsuite/icons/Search';
 import MoreIcon from '@rsuite/icons/legacy/More';
 import DrawerView from './DrawerView';
-import { mockUsers } from '@/data/mock';
 import { NameCell, ImageCell, CheckCell, ActionCell } from '../Cells';
 
 
