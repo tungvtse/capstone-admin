@@ -3,100 +3,135 @@ import { Icon } from '@rsuite/icons';
 import { VscTable, VscCalendar } from 'react-icons/vsc';
 import { MdFingerprint, MdDashboard, MdModeEditOutline } from 'react-icons/md';
 import CubesIcon from '@rsuite/icons/legacy/Cubes';
+import { RiFileList3Line, RiMoneyDollarCircleLine } from 'react-icons/ri'
+import { AiOutlineSchedule } from 'react-icons/ai'
+import { PiUsers } from "react-icons/pi";
+import { FaLocationDot } from "react-icons/fa6";
+import { MdRememberMe } from "react-icons/md";
+import { BiHeadphone } from "react-icons/bi";
+import { FaBox } from "react-icons/fa";
+import { useSelector } from 'react-redux';
+import { RootState } from './store/store';
 
-export const appNavs = [
+
+
+export const adminNavs = [
+
   {
     eventKey: 'dashboard',
     icon: <Icon as={MdDashboard} />,
     title: 'Dashboard',
     to: '/dashboard'
   },
+
+  // {
+  //   eventKey: 'transactions',
+  //   icon: <Icon as={RiMoneyDollarCircleLine} />,
+  //   title: 'Danh sách giao dịch',
+  //   to: '/transactions'
+  // },
   {
-    eventKey: 'calendar',
-    icon: <Icon as={VscCalendar} />,
-    title: 'Calendar',
-    to: '/calendar'
+    eventKey: 'users',
+    icon: <Icon as={PiUsers} />,
+    title: 'Danh sách người dùng',
+    to: '/users'
+  },
+  // {
+  //   eventKey: 'hubs',
+  //   icon: <Icon as={FaLocationDot} />,
+  //   title: 'Danh sách trạm',
+  //   to: '/hubs'
+  // },
+  {
+    eventKey: 'partners',
+    icon: <Icon as={MdRememberMe} />,
+    title: 'Danh sách đối tác',
+    to: '/partners'
+  },
+
+  {
+    eventKey: 'orders',
+    icon: <Icon as={RiFileList3Line} />,
+    title: 'Danh sách đơn hàng',
+    to: '/orders'
   },
   {
-    eventKey: 'tables',
-    icon: <Icon as={VscTable} />,
-    title: 'Tables',
-    to: '/table-members',
-    children: [
-      {
-        eventKey: 'members',
-        title: 'Members',
-        to: '/table-members'
-      },
-      {
-        eventKey: 'virtualized',
-        title: 'Virtualized Table',
-        to: '/table-virtualized'
-      }
-    ]
+    eventKey: 'box-size',
+    title: 'Danh sách box size',
+    icon: <Icon as={FaBox} />,
+
+    to: '/box-size',
   },
   {
-    eventKey: 'forms',
-    icon: <Icon as={MdModeEditOutline} />,
-    title: 'Forms',
-    to: '/form-basic',
-    children: [
-      {
-        eventKey: 'form-basic',
-        title: 'Basic',
-        to: '/form-basic'
-      },
-      {
-        eventKey: 'form-wizard',
-        title: 'Wizard',
-        to: '/form-wizard'
-      }
-    ]
+    eventKey: 'staffs',
+    icon: <Icon as={BiHeadphone} />,
+    title: 'Danh sách nhân viên',
+    to: '/staffs'
   },
   {
-    eventKey: 'authentication',
-    title: 'Authentication',
+    eventKey: 'create-partner-account',
+    title: 'Tạo tài khoản partner',
     icon: <Icon as={MdFingerprint} />,
-    children: [
-      {
-        eventKey: 'sign-in',
-        title: 'Sign In',
-        to: '/sign-in'
-      },
 
-      {
-        eventKey: 'sign-up',
-        title: 'Sign Up',
-        to: '/sign-up'
-      },
-      {
-        eventKey: 'error403',
-        title: 'Error 403',
-        to: '/error-403'
-      },
-      {
-        eventKey: 'error404',
-        title: 'Error 404',
-        to: '/error-404'
-      },
-      {
-        eventKey: 'error500',
-        title: 'Error 500',
-        to: '/error-500'
-      },
-      {
-        eventKey: 'error503',
-        title: 'Error 503',
-        to: '/error-503'
-      }
-    ]
+    to: '/create-partner-account',
+  },
+  {
+    eventKey: 'create-staff-account',
+    title: 'Tạo tài khoản staff',
+    icon: <Icon as={MdFingerprint} />,
+
+    to: '/create-staff-account',
+  },
+
+]
+
+export const staffNavs = [
+
+  {
+    eventKey: 'dashboard',
+    icon: <Icon as={MdDashboard} />,
+    title: 'Dashboard',
+    to: '/dashboard'
+  },
+
+  // {
+  //   eventKey: 'transactions',
+  //   icon: <Icon as={RiMoneyDollarCircleLine} />,
+  //   title: 'Danh sách giao dịch',
+  //   to: '/transactions'
+  // },
+  {
+    eventKey: 'users',
+    icon: <Icon as={PiUsers} />,
+    title: 'Danh sách người dùng',
+    to: '/users'
+  },
+  // {
+  //   eventKey: 'hubs',
+  //   icon: <Icon as={FaLocationDot} />,
+  //   title: 'Danh sách trạm',
+  //   to: '/hubs'
+  // },
+  {
+    eventKey: 'partners',
+    icon: <Icon as={MdRememberMe} />,
+    title: 'Danh sách đối tác',
+    to: '/partners'
   },
 
   {
-    eventKey: 'components',
-    title: 'Components',
-    icon: <CubesIcon />,
-    href: 'https://rsuitejs.com/components/overview/',
-    target: '_blank'
-  }
+    eventKey: 'orders',
+    icon: <Icon as={RiFileList3Line} />,
+    title: 'Danh sách đơn hàng',
+    to: '/orders'
+  },
+  // {
+  //   eventKey: 'box-size',
+  //   title: 'Danh sách box size',
+  //   icon: <Icon as={FaBox} />,
+
+  //   to: '/box-size',
+  // },
+
+
 ];

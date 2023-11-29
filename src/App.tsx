@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { IntlProvider } from 'react-intl';
 import { CustomProvider } from 'rsuite';
@@ -12,33 +12,66 @@ import Error500Page from './pages/authentication/500';
 import Error503Page from './pages/authentication/503';
 
 import SignInPage from './pages/authentication/sign-in';
-import SignUpPage from './pages/authentication/sign-up';
 import MembersPage from './pages/tables/members';
 import VirtualizedTablePage from './pages/tables/virtualized';
 import FormBasicPage from './pages/forms/basic';
 import FormWizardPage from './pages/forms/wizard';
-import CalendarPage from './pages/calendar';
-import { appNavs } from './config';
+import { adminNavs, staffNavs } from './config';
+import LoginPage from './pages/signin';
+import PartnerAccount from './pages/authentication/accountCreating/PartnerAccount';
+import StaffAccount from './pages/authentication/accountCreating/StaffAccount';
+import PartnerTable from './pages/tables/partner';
+import StaffsTable from './pages/tables/staffs';
+import HubTable from './pages/tables/hubs';
+import OrderTable from './pages/tables/orders';
+import ChangePassword from './pages/authentication/changePassword';
+import BoxSizeTable from './pages/tables/boxsize';
+import { RootState } from './store/store';
+import { useSelector } from 'react-redux';
+
 
 const App = () => {
+  const [currentRole, setCurrentRole] = useState<string>('')
+
+  const role = useSelector((state: RootState) => state.role.role)
+  const localRole = localStorage.getItem('role')
+  useEffect(() => {
+    if (role === null && localRole) {
+      setCurrentRole(localRole)
+    }
+    else if (role) {
+      setCurrentRole(role)
+    }
+  }, [role])
+  useEffect(() => {
+    console.log(currentRole, localRole);
+
+  }, [currentRole])
+
+
+
   return (
     <IntlProvider locale="en" messages={locales.en}>
       <CustomProvider locale={enGB}>
         <Routes>
-          <Route path="/" element={<Frame navs={appNavs} />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<Frame navs={currentRole === 'admin' ? adminNavs : staffNavs} />}>
             <Route index element={<DashboardPage />} />
             <Route path="dashboard" element={<DashboardPage />} />
-            <Route path="table-members" element={<MembersPage />} />
+            <Route path="transactions" element={<MembersPage />} />
             <Route path="table-virtualized" element={<VirtualizedTablePage />} />
-            <Route path="error-404" element={<Error404Page />} />
-            <Route path="error-403" element={<Error403Page />} />
-            <Route path="error-500" element={<Error500Page />} />
-            <Route path="error-503" element={<Error503Page />} />
             <Route path="sign-in" element={<SignInPage />} />
-            <Route path="sign-up" element={<SignUpPage />} />
+            {currentRole === 'admin' ? (<><Route path="create-partner-account" element={<PartnerAccount />} />
+              <Route path="create-staff-account" element={<StaffAccount />} /></>) : (<></>)}
             <Route path="form-basic" element={<FormBasicPage />} />
             <Route path="form-wizard" element={<FormWizardPage />} />
-            <Route path="calendar" element={<CalendarPage />} />
+            <Route path="orders" element={<OrderTable />} />
+            <Route path="users" element={<MembersPage />} />
+            <Route path="staffs" element={<StaffsTable />} />
+            <Route path="partners" element={<PartnerTable />} />
+            <Route path="hubs" element={<HubTable />} />
+            <Route path="change-password" element={<ChangePassword />} />
+            <Route path="box-size" element={<BoxSizeTable />} />
           </Route>
           <Route path="*" element={<Error404Page />} />
         </Routes>

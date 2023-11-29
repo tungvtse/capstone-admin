@@ -1,14 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Logo from './Logo';
+import logo from '../images/logo.jpg'
 import { Stack } from 'rsuite';
 
 const Brand = props => {
+  const role = localStorage.getItem('role')
   return (
     <Stack className="brand" {...props}>
-      <Logo height={26} style={{ marginTop: 6 }} />
       <Link to="/">
-        <span style={{ marginLeft: 14 }}>Admin Template</span>
+
+        <img src={logo} height={50} style={{ marginTop: 6 }} />
+        <span style={{ marginLeft: 14, color: '#515151' }}>ChanhXe</span>
+        <span style={{ color: '#3EBDE0' }}>{role === 'staff' ? 'Staff' : 'Admin'}</span>
       </Link>
     </Stack>
   );

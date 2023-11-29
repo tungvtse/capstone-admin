@@ -1,4 +1,4 @@
-# Admin Dashboard Template
+# Chành Xe Admin
 
 Ease developers’ life with the React Suite 5. TypeScript will help with optimizing. Quick start & easily extensible code.
 

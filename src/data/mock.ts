@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker/locale/en';
 
 export function mockUsers(length: number) {
-  const createRowData = rowIndex => {
+  const createRowData = (rowIndex: any) => {
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
     const gender = faker.name.gender(true) as 'female' | 'male';

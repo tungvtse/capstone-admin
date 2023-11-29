@@ -4,6 +4,8 @@ import * as images from '../../images/charts';
 import BarChart from './BarChart';
 import PieChart from './PieChart';
 import DataTable from './DataTable';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 const barChartData = [
   {
@@ -30,28 +32,32 @@ const barChartData = [
 ];
 
 const Dashboard = () => {
+  const orderCount = useSelector((state: RootState) => state.count.orderCount)
+  const partnerCount = useSelector((state: RootState) => state.count.partnerCount)
+  const userCount = useSelector((state: RootState) => state.count.userCount)
+  const userLocalCount = localStorage.getItem('userCount')
+  const partnerLocalCount = localStorage.getItem('partnerCount')
+  const orderLocalCount = localStorage.getItem('orderCount')
+
   return (
     <>
       <Row gutter={30} className="dashboard-header">
         <Col xs={8}>
           <Panel className="trend-box bg-gradient-red">
-            <img className="chart-img" src={images.PVIcon} />
-            <div className="title">Page Views </div>
-            <div className="value">281,358</div>
+            <div className="title">Users </div>
+            <div className="value">{userCount === 0 ? userLocalCount : userCount}</div>
           </Panel>
         </Col>
         <Col xs={8}>
           <Panel className="trend-box bg-gradient-green">
-            <img className="chart-img" src={images.VVICon} />
-            <div className="title">Visits </div>
-            <div className="value">251,901</div>
+            <div className="title">Orders </div>
+            <div className="value">{orderCount === 0 ? orderLocalCount : orderCount}</div>
           </Panel>
         </Col>
         <Col xs={8}>
           <Panel className="trend-box bg-gradient-blue">
-            <img className="chart-img" src={images.UVIcon} />
-            <div className="title">Unique Visitors</div>
-            <div className="value">25,135</div>
+            <div className="title">Partners</div>
+            <div className="value">{partnerCount === 0 ? partnerLocalCount : partnerCount}</div>
           </Panel>
         </Col>
       </Row>

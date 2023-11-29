@@ -15,20 +15,25 @@ import MoreIcon from '@rsuite/icons/legacy/More';
 import DrawerView from './DrawerView';
 import { mockUsers } from '@/data/mock';
 import { NameCell, ImageCell, CheckCell, ActionCell } from './Cells';
+import axios from 'axios';
+import { url } from '../../../url'
+import { Typography } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { setUserCount } from '@/store/counteSlice';
 
-const data = mockUsers(20);
 
 const { Column, HeaderCell, Cell } = Table;
 const { getHeight } = DOMHelper;
 
-const ratingList = Array.from({ length: 5 }).map((_, index) => {
-  return {
-    value: index + 1,
-    label: Array.from({ length: index + 1 })
-      .map(() => '⭐️')
-      .join('')
-  };
-});
+type Partner = {
+  id: number;
+  username: string;
+  name: string;
+  email: string;
+  status: "ACTIVE" | "INACTIVE"
+}
+
+
 
 const DataTable = () => {
   const [showDrawer, setShowDrawer] = useState(false);
@@ -36,45 +41,15 @@ const DataTable = () => {
   const [sortColumn, setSortColumn] = useState();
   const [sortType, setSortType] = useState();
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [rating, setRating] = useState<number | null>(null);
+  const [data, setData] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(false);
 
-  let checked = false;
-  let indeterminate = false;
+  const dispatch = useDispatch()
 
-  if (checkedKeys.length === data.length) {
-    checked = true;
-  } else if (checkedKeys.length === 0) {
-    checked = false;
-  } else if (checkedKeys.length > 0 && checkedKeys.length < data.length) {
-    indeterminate = true;
-  }
 
-  const handleCheckAll = (_value, checked) => {
-    const keys = checked ? data.map(item => item.id) : [];
-    setCheckedKeys(keys);
-  };
-  const handleCheck = (value, checked) => {
-    const keys = checked ? [...checkedKeys, value] : checkedKeys.filter(item => item !== value);
-    setCheckedKeys(keys);
-  };
-
-  const handleSortColumn = (sortColumn, sortType) => {
-    setSortColumn(sortColumn);
-    setSortType(sortType);
-  };
 
   const filteredData = () => {
-    const filtered = data.filter(item => {
-      if (!item.name.includes(searchKeyword)) {
-        return false;
-      }
-
-      if (rating && item.rating !== rating) {
-        return false;
-      }
-
-      return true;
-    });
+    const filtered = data.filter((item) => item.attributes.name.includes(searchKeyword));
 
     if (sortColumn && sortType) {
       return filtered.sort((a, b) => {
@@ -98,23 +73,64 @@ const DataTable = () => {
     return filtered;
   };
 
+
+
+  const handleSortColumn = (sortColumn, sortType) => {
+    setSortColumn(sortColumn);
+    setSortType(sortType);
+  };
+
+  const bearerToken = localStorage.getItem('sessionId')
+  const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": `Bearer ${bearerToken}`
+
+  }
+
+  const getUserList = async () => {
+    setIsLoading(true)
+    try {
+      axios({
+
+        method: 'get',
+        url: `${url}/account/customers`,
+        headers: headers
+      }).then((res) => {
+        console.log(res.data.data);
+        setData(res.data.data)
+        setIsLoading(false)
+        dispatch(setUserCount({
+          userCount: res.data.data.length
+        }))
+        localStorage.setItem('userCount', res.data.data.length)
+
+      }).catch((error) => {
+        console.log(error);
+        setIsLoading(false)
+
+      })
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false)
+
+    }
+  }
+
+  React.useEffect(() => {
+    getUserList()
+  }, [])
+
+
   return (
     <>
       <Stack className="table-toolbar" justifyContent="space-between">
-        <Button appearance="primary" onClick={() => setShowDrawer(true)}>
-          Add Member
-        </Button>
+
 
         <Stack spacing={6}>
-          <SelectPicker
-            label="Rating"
-            data={ratingList}
-            searchable={false}
-            value={rating}
-            onChange={setRating}
-          />
+
           <InputGroup inside>
-            <Input placeholder="Search" value={searchKeyword} onChange={setSearchKeyword} />
+            <Input placeholder="Tìm kiếm theo tên" value={searchKeyword} onChange={setSearchKeyword} />
             <InputGroup.Addon>
               <SearchIcon />
             </InputGroup.Addon>
@@ -123,69 +139,89 @@ const DataTable = () => {
       </Stack>
 
       <Table
-        height={Math.max(getHeight(window) - 200, 400)}
+        height={Math.max(getHeight(window) - 200, 450)}
         data={filteredData()}
         sortColumn={sortColumn}
         sortType={sortType}
         onSortColumn={handleSortColumn}
+        loading={isLoading}
       >
-        <Column width={50} align="center" fixed>
-          <HeaderCell>Id</HeaderCell>
-          <Cell dataKey="id" />
-        </Column>
+        <Column width={100} align="center" fixed>
+          <HeaderCell style={{ color: '#373d58', fontWeight: 'bold', fontSize: '14px' }}>Id</HeaderCell>
+          <Cell style={{
+            alignItems: 'center',
+            paddingTop: ''
+          }} >
+            {rowData => {
 
-        <Column width={50} fixed>
-          <HeaderCell style={{ padding: 0 }}>
-            <div style={{ lineHeight: '40px' }}>
-              <Checkbox
-                inline
-                checked={checked}
-                indeterminate={indeterminate}
-                onChange={handleCheckAll}
-              />
-            </div>
-          </HeaderCell>
-          <CheckCell dataKey="id" checkedKeys={checkedKeys} onChange={handleCheck} />
-        </Column>
-        <Column width={80} align="center">
-          <HeaderCell>Avatar</HeaderCell>
-          <ImageCell dataKey="avatar" />
-        </Column>
-
-        <Column minWidth={160} flexGrow={1} sortable>
-          <HeaderCell>Name</HeaderCell>
-          <NameCell dataKey="name" />
-        </Column>
-
-        <Column width={230} sortable>
-          <HeaderCell>Skill Proficiency</HeaderCell>
-          <Cell style={{ padding: '10px 0' }} dataKey="progress">
-            {rowData => <Progress percent={rowData.progress} showInfo={false} />}
+              return (<Typography fontSize={'14px'} width="80%" color="#575757" >
+                {rowData.id}
+              </Typography>)
+            }}
           </Cell>
         </Column>
 
-        <Column width={100} sortable>
-          <HeaderCell>Rating</HeaderCell>
-          <Cell dataKey="rating">
-            {rowData =>
-              Array.from({ length: rowData.rating }).map((_, i) => <span key={i}>⭐️</span>)
-            }
+
+        <Column width={200} sortable>
+          <HeaderCell style={{ color: '#373d58', fontWeight: 'bold', fontSize: '14px' }}>Email</HeaderCell>
+          <Cell style={{
+            alignItems: 'center',
+            paddingTop: ''
+          }} >
+            {rowData => {
+
+              return (<Typography fontSize={'14px'} width="80%" color="#575757" >
+                {rowData.attributes.email}
+              </Typography>)
+            }}
+          </Cell>
+        </Column>
+        <Column width={200} sortable>
+          <HeaderCell style={{ color: '#373d58', fontWeight: 'bold', fontSize: '14px' }}>Tên khách hàng </HeaderCell>
+          <Cell style={{
+            alignItems: 'center',
+            paddingTop: ''
+          }} >
+            {rowData => {
+
+              return (<Typography fontSize={'14px'} width="80%" color="#575757" >
+                {rowData.attributes.name}
+              </Typography>)
+            }}
           </Cell>
         </Column>
 
-        <Column width={100} sortable>
-          <HeaderCell>Income</HeaderCell>
-          <Cell dataKey="amount">{rowData => `$${rowData.amount}`}</Cell>
-        </Column>
+        <Column width={200}>
+          <HeaderCell style={{ color: '#373d58', fontWeight: 'bold', fontSize: '14px' }}>Số điện thoại</HeaderCell>
+          <Cell style={{
+            alignItems: 'center',
+            paddingTop: ''
+          }} >
+            {rowData => {
 
-        <Column width={300}>
-          <HeaderCell>Email</HeaderCell>
-          <Cell dataKey="email" />
+              return (<Typography fontSize={'14px'} width="80%" color="#575757" >
+                {rowData.attributes.phone}
+              </Typography>)
+            }}
+          </Cell>
+        </Column>
+        <Column width={100}>
+          <HeaderCell style={{ color: '#373d58', fontWeight: 'bold', fontSize: '14px' }}>Trạng thái</HeaderCell>
+          <Cell style={{
+            paddingTop: ''
+          }} >
+            {rowData => {
+
+              return (<Typography fontSize={'14px'} width="100%" textAlign={'center'} color="white" borderRadius={'10px'} alignItems={'center'} p="0.25rem" bgcolor={rowData.attributes.status === 1 ? "#5bb98e" : "#ec5860"} >
+                {rowData.attributes.status === 1 ? "ACTIVE" : "INACTIVE"}
+              </Typography>)
+            }}
+          </Cell>
         </Column>
 
         <Column width={120}>
-          <HeaderCell>
-            <MoreIcon />
+          <HeaderCell style={{ color: '#373d58', fontWeight: 'bold', fontSize: '14px' }}>
+            Cập nhật trạng thái tài khoản
           </HeaderCell>
           <ActionCell dataKey="id" />
         </Column>

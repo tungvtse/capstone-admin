@@ -52,12 +52,12 @@ const DrawerView = (props: DrawerProps) => {
             <Form.Control name="street" />
           </Form.Group>
 
-          <Form.Group>
+          {/* <Form.Group>
             <Form.ControlLabel>Rating</Form.ControlLabel>
             <Form.Control name="rating" accepter={Rate} />
-          </Form.Group>
+          </Form.Group> */}
 
-          <Form.Group>
+          {/* <Form.Group>
             <Form.ControlLabel>Skill Proficiency</Form.ControlLabel>
             <Form.Control name="skill" accepter={Slider} progress />
           </Form.Group>
@@ -68,7 +68,7 @@ const DrawerView = (props: DrawerProps) => {
               <InputGroup.Addon>$</InputGroup.Addon>
               <Form.Control name="income" accepter={InputNumber} style={{ width: '100%' }} />
             </InputGroup>
-          </Form.Group>
+          </Form.Group> */}
         </Form>
       </Drawer.Body>
     </Drawer>

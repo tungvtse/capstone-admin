@@ -16,26 +16,33 @@ import GearIcon from '@rsuite/icons/Gear';
 import HelpOutlineIcon from '@rsuite/icons/HelpOutline';
 import GithubIcon from '@rsuite/icons/legacy/Github';
 import HeartIcon from '@rsuite/icons/legacy/HeartO';
+import { useNavigate, Link } from 'react-router-dom';
 
 const renderAdminSpeaker = ({ onClose, left, top, className }: any, ref) => {
   const handleSelect = eventKey => {
     onClose();
     console.log(eventKey);
   };
+  const username = localStorage.getItem('username')
+  const navigate = useNavigate();
   return (
     <Popover ref={ref} className={className} style={{ left, top }} full>
       <Dropdown.Menu onSelect={handleSelect}>
         <Dropdown.Item panel style={{ padding: 10, width: 160 }}>
           <p>Signed in as</p>
-          <strong>Administrator</strong>
+          <strong>{username}</strong>
         </Dropdown.Item>
         <Dropdown.Item divider />
-        <Dropdown.Item>Set status</Dropdown.Item>
-        <Dropdown.Item>Profile & account</Dropdown.Item>
+        <Dropdown.Item onClick={() => {
+          navigate("change-password")
+        }}>
+          Profile & account</Dropdown.Item>
         <Dropdown.Item>Feedback</Dropdown.Item>
         <Dropdown.Item divider />
-        <Dropdown.Item>Settings</Dropdown.Item>
-        <Dropdown.Item>Sign out</Dropdown.Item>
+        <Dropdown.Item onClick={() => {
+          localStorage.removeItem("sessionId")
+          navigate("/login")
+        }}>Sign out</Dropdown.Item>
         <Dropdown.Item
           icon={<HelpOutlineIcon />}
           href="https://rsuitejs.com"
@@ -119,26 +126,10 @@ const Header = () => {
 
   return (
     <Stack className="header" spacing={8}>
-      <IconButton
-        icon={<HeartIcon style={{ fontSize: 20 }} color="red" />}
-        href="https://opencollective.com/rsuite"
-        target="_blank"
-      />
-      <IconButton
-        icon={<GithubIcon style={{ fontSize: 20 }} />}
-        href="https://github.com/rsuite/rsuite-admin-template"
-        target="_blank"
-      />
 
-      <Whisper placement="bottomEnd" trigger="click" ref={trigger} speaker={renderNoticeSpeaker}>
-        <IconButton
-          icon={
-            <Badge content={5}>
-              <NoticeIcon style={{ fontSize: 20 }} />
-            </Badge>
-          }
-        />
-      </Whisper>
+
+
+
 
       <Whisper placement="bottomEnd" trigger="click" ref={trigger} speaker={renderSettingSpeaker}>
         <IconButton icon={<GearIcon style={{ fontSize: 20 }} />} />
@@ -148,7 +139,7 @@ const Header = () => {
         <Avatar
           size="sm"
           circle
-          src="https://avatars.githubusercontent.com/u/1203827"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXTdolvwJEJdsHZTJI6F7LjUDXeMidz0PPkQ&usqp=CAU"
           alt="@simonguo"
           style={{ marginLeft: 8 }}
         />
