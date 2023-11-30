@@ -19,6 +19,7 @@ import { url } from '../../../url'
 import { Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { setUserCount } from '@/store/counteSlice';
+import { Tag } from "antd"
 
 
 const { Column, HeaderCell, Cell } = Table;
@@ -211,9 +212,9 @@ const DataTable = () => {
           }} >
             {rowData => {
 
-              return (<Typography fontSize={'14px'} width="100%" textAlign={'center'} color="white" borderRadius={'10px'} alignItems={'center'} p="0.25rem" bgcolor={rowData.attributes.status === 1 ? "#5bb98e" : "#ec5860"} >
+              return (<Tag color={rowData.attributes.status === 1 ? "success" : "error"}>
                 {rowData.attributes.status === 1 ? "ACTIVE" : "INACTIVE"}
-              </Typography>)
+              </Tag>)
             }}
           </Cell>
         </Column>

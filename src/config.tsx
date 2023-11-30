@@ -17,12 +17,7 @@ import { RootState } from './store/store';
 
 export const adminNavs = [
 
-  {
-    eventKey: 'dashboard',
-    icon: <Icon as={MdDashboard} />,
-    title: 'Dashboard',
-    to: '/dashboard'
-  },
+
 
   // {
   //   eventKey: 'transactions',
@@ -87,12 +82,7 @@ export const adminNavs = [
 
 export const staffNavs = [
 
-  {
-    eventKey: 'dashboard',
-    icon: <Icon as={MdDashboard} />,
-    title: 'Dashboard',
-    to: '/dashboard'
-  },
+
 
   // {
   //   eventKey: 'transactions',

@@ -52,6 +52,7 @@ const App = () => {
   return (
     <IntlProvider locale="en" messages={locales.en}>
       <CustomProvider locale={enGB}>
+
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<Frame navs={currentRole === 'admin' ? adminNavs : staffNavs} />}>

@@ -14,7 +14,7 @@ import {
     Modal,
 } from 'rsuite';
 import { CiCirclePlus } from "react-icons/ci";
-import { Drawer, DatePicker } from 'antd';
+import { Drawer, DatePicker, Tag } from 'antd';
 import { url } from '../../../url'
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
@@ -344,7 +344,7 @@ const DrawerView = (props: any) => {
                                     <Box >
                                         {rowData.attributes.items.map((item, i) => {
                                             return (
-                                                <Typography key={i} bgcolor={'#F4F4F5'} mb="0.1rem" borderRadius={'10px'} p="0.25rem" fontSize={'10px'} color="#0C3472">Từ {item.fromKilometer}km đến {item.toKilometer}km, giá tối thiểu: {item.minAmount}VND, giá tối đa: {item.maxAmount}VND </Typography>
+                                                <Tag key={i} color='processing'>Từ {item.fromKilometer}km đến {item.toKilometer}km, giá tối thiểu: {item.minAmount}VND, giá tối đa: {item.maxAmount}VND </Tag>
                                             )
                                         })}
                                     </Box>
@@ -406,7 +406,7 @@ const DrawerView = (props: any) => {
                                     <>
                                         {price.items.map((item, i) => {
                                             return (
-                                                <Typography key={i} bgcolor={'#F4F4F5'} mb="0.1rem" borderRadius={'10px'} p="0.25rem" fontSize={'10px'} color="#0C3472">Từ {item.from_kilometer}km đến {item.to_kilometer}km, giá tối thiểu: {item.min_amount}VND, giá tối đa: {item.max_amount}VND </Typography>
+                                                <Tag key={i} color='processing'>Từ {item.from_kilometer}km đến {item.to_kilometer}km, giá tối thiểu: {item.min_amount}VND, giá tối đa: {item.max_amount}VND </Tag>
 
                                             )
                                         })}

@@ -24,6 +24,7 @@ import axios from 'axios';
 import { url } from '../../../url'
 import { useDispatch } from 'react-redux';
 import { setOrderCount } from '@/store/counteSlice';
+import { Tag } from "antd"
 
 
 const { Column, HeaderCell, Cell } = Table;
@@ -399,9 +400,10 @@ const DataTable = (props: Props) => {
                     }} >
                         {rowData => {
 
-                            return (<Typography textAlign={'center'} onClick={() => { handleRowClick(rowData) }} fontSize={'14px'} width="100%" color={rowData.is_paid === true ? "#97DDA2" : "#fc664e"} p="0.25rem" borderRadius={'10px'} >
-                                {rowData.is_paid === true ? "Đã thanh toán" : "Chưa thanh toán"}
-                            </Typography>)
+                            return (
+                                <Tag color={rowData.is_paid === true ? "success" : "error"} > {rowData.is_paid === true ? "Đã thanh toán" : "Chưa thanh toán"}</Tag>
+
+                            )
                         }}
                     </Cell>
                 </Column>
